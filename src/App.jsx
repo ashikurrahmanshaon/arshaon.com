@@ -37,16 +37,16 @@ function App() {
         {/* Premium Animated Background */}
         <div className="fixed inset-0 z-0 bg-background overflow-hidden pointer-events-none">
           
-          {/* Ultra-optimized Cinematic Orbs (No Blur Filter = 99.99 Performance) */}
+          {/* Ultra-optimized Cinematic Orbs (No Blur Filter = 99.99 Performance, hidden on mobile for CPU savings) */}
           <div 
-            className="absolute top-[-10%] left-[-20%] w-[600px] h-[600px] md:w-[80vw] md:h-[80vw] lg:w-[50vw] lg:h-[50vw] rounded-full animate-pulse pointer-events-none" 
+            className="hidden md:block absolute top-[-10%] left-[-20%] w-[600px] h-[600px] md:w-[80vw] md:h-[80vw] lg:w-[50vw] lg:h-[50vw] rounded-full animate-pulse pointer-events-none" 
             style={{ 
               background: 'radial-gradient(circle, rgba(0,223,143,0.12) 0%, rgba(0,223,143,0) 70%)',
               animationDuration: '8s'
             }}
           />
           <div 
-            className="absolute bottom-[-10%] right-[-20%] w-[700px] h-[700px] md:w-[90vw] md:h-[90vw] lg:w-[60vw] lg:h-[60vw] rounded-full animate-pulse pointer-events-none" 
+            className="hidden md:block absolute bottom-[-10%] right-[-20%] w-[700px] h-[700px] md:w-[90vw] md:h-[90vw] lg:w-[60vw] lg:h-[60vw] rounded-full animate-pulse pointer-events-none" 
             style={{ 
               background: 'radial-gradient(circle, rgba(0,179,115,0.12) 0%, rgba(0,179,115,0) 70%)',
               animationDuration: '12s',
@@ -54,7 +54,7 @@ function App() {
             }}
           />
           <div 
-            className="absolute top-[30%] left-[50%] -translate-x-1/2 w-[500px] h-[500px] md:w-[60vw] md:h-[60vw] lg:w-[40vw] lg:h-[40vw] rounded-full animate-pulse pointer-events-none" 
+            className="hidden md:block absolute top-[30%] left-[50%] -translate-x-1/2 w-[500px] h-[500px] md:w-[60vw] md:h-[60vw] lg:w-[40vw] lg:h-[40vw] rounded-full animate-pulse pointer-events-none" 
             style={{ 
               background: 'radial-gradient(circle, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0) 70%)',
               animationDuration: '15s',

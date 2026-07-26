@@ -70,6 +70,7 @@ const ProjectsGallery = () => {
                     <img 
                       src={project.image} 
                       alt={project.title}
+                      loading="lazy"
                       className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-105" 
                     />
                     <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors duration-500" />

@@ -117,6 +117,8 @@ const Hero = () => {
                 alt="Ashikur Rahman Shaon" 
                 className="w-full h-full object-cover object-center filter contrast-[1.05] saturate-110"
                 draggable={false}
+                fetchpriority="high"
+                decoding="sync"
               />
             </motion.div>
 

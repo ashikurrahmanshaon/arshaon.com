@@ -1,12 +1,21 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Mail, Lock, AlertCircle, Loader2 } from 'lucide-react';
+import { X, Mail, Lock, AlertCircle, Loader2, User } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
-const AuthModal = ({ isOpen, onClose }) => {
-  const [isLogin, setIsLogin] = useState(true);
+const AuthModal = ({ isOpen, onClose, initialMode = 'login' }) => {
+  const [isLogin, setIsLogin] = useState(initialMode === 'login');
+  
+  // Sync when modal opens or initialMode changes
+  useEffect(() => {
+    if (isOpen) {
+      setIsLogin(initialMode === 'login');
+    }
+  }, [isOpen, initialMode]);
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const { loginWithGoogle, loginWithEmail, signupWithEmail } = useAuth();
@@ -27,8 +36,8 @@ const AuthModal = ({ isOpen, onClose }) => {
 
   const handleEmailAuth = async (e) => {
     e.preventDefault();
-    if (!email || !password) {
-      return setError('Please enter both email and password.');
+    if (!email || !password || (!isLogin && !name)) {
+      return setError('Please fill in all fields.');
     }
     
     try {
@@ -37,7 +46,7 @@ const AuthModal = ({ isOpen, onClose }) => {
       if (isLogin) {
         await loginWithEmail(email, password);
       } else {
-        await signupWithEmail(email, password);
+        await signupWithEmail(email, password, name);
       }
       onClose();
     } catch (err) {
@@ -137,6 +146,18 @@ const AuthModal = ({ isOpen, onClose }) => {
               </div>
 
               <form onSubmit={handleEmailAuth} className="space-y-4">
+                {!isLogin && (
+                  <div className="relative">
+                    <User className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 w-5 h-5" />
+                    <input
+                      type="text"
+                      placeholder="Full Name"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      className="w-full bg-white/5 border border-white/10 rounded-2xl py-3.5 pl-12 pr-4 text-white placeholder:text-gray-500 focus:outline-none focus:border-primary focus:bg-white/10 transition-all"
+                    />
+                  </div>
+                )}
                 <div className="relative">
                   <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 w-5 h-5" />
                   <input

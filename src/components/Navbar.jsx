@@ -7,11 +7,18 @@ import AuthModal from './AuthModal';
 
 const ADMIN_EMAILS = ['arshaon146140@gmail.com', 'your-email@gmail.com'];
 
+// Brand SVGs since lucide-react removed them
+const FacebookIcon = ({ size=24 }) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>;
+const InstagramIcon = ({ size=24 }) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>;
+const LinkedinIcon = ({ size=24 }) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>;
+const YoutubeIcon = ({ size=24 }) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33 2.78 2.78 0 0 0 1.94 2c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.33 29 29 0 0 0-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/></svg>;
+
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [authMode, setAuthMode] = useState('login');
   const location = useLocation();
   const { user, logout } = useAuth();
   const isAdmin = user && ADMIN_EMAILS.includes(user.email);
@@ -148,15 +155,15 @@ const Navbar = () => {
                 </div>
               ) : (
                 <div className="flex items-center gap-2">
-                  <Link 
-                    to="/login"
-                    className="px-4 py-2.5 text-[14px] font-medium tracking-wide text-gray-400 hover:text-white transition-all duration-300 leading-none"
+                  <button 
+                    onClick={() => { setAuthMode('login'); setIsAuthModalOpen(true); }}
+                    className="px-4 py-2.5 text-[14px] font-medium tracking-wide text-gray-400 hover:text-white transition-all duration-300 leading-none cursor-pointer"
                   >
                     Log In
-                  </Link>
-                  <Link 
-                    to="/signup"
-                    className="relative group px-6 py-2.5 rounded-full overflow-hidden transition-all duration-300 hover:scale-105 inline-block"
+                  </button>
+                  <button 
+                    onClick={() => { setAuthMode('signup'); setIsAuthModalOpen(true); }}
+                    className="relative group px-6 py-2.5 rounded-full overflow-hidden transition-all duration-300 hover:scale-105 inline-block cursor-pointer"
                   >
                     {/* Animated Glow Background */}
                     <div className="absolute inset-0 bg-primary/10 group-hover:bg-primary transition-colors duration-500"></div>
@@ -168,7 +175,7 @@ const Navbar = () => {
                     <span className="relative z-10 text-[14px] font-semibold tracking-wide text-primary group-hover:text-[#05070a] transition-colors duration-300 flex items-center gap-2 h-full">
                       Sign Up
                     </span>
-                  </Link>
+                  </button>
                 </div>
               )}
             </div>
@@ -188,70 +195,91 @@ const Navbar = () => {
         <AnimatePresence>
           {isOpen && (
             <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
-              className="fixed inset-0 z-40 bg-[#05070a]/95 backdrop-blur-3xl pt-24 px-6 flex flex-col lg:hidden"
+              className="fixed inset-0 z-40 bg-[#0d1116]/90 backdrop-blur-2xl pt-24 px-6 flex flex-col lg:hidden overflow-y-auto pb-8"
             >
-              <div className="flex flex-col gap-6 mt-8">
-                {[{name: 'Home', path: '/'}, ...navItems, {name: 'Dashboard', path: '/dashboard'}].map((item) => {
+              <div className="flex flex-col gap-1 mt-4">
+                {[{name: 'Home', path: '/'}, ...navItems, {name: 'Dashboard', path: '/dashboard'}].map((item, i) => {
                   const isActive = location.pathname === item.path;
                   // Don't show Dashboard link to logged out users
                   if (item.path === '/dashboard' && !user) return null;
                   
                   return (
-                    <Link
+                    <motion.div
                       key={item.name}
-                      to={item.path}
-                      onClick={() => setIsOpen(false)}
-                      className={`text-3xl font-display font-bold text-left uppercase tracking-tight transition-colors border-b border-white/5 pb-4 ${isActive ? 'text-primary' : 'text-white hover:text-primary'}`}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: i * 0.05 + 0.1, duration: 0.4 }}
+                      className="w-full"
                     >
-                      {item.name}
-                    </Link>
+                      <Link
+                        to={item.path}
+                        onClick={() => setIsOpen(false)}
+                        className={`block w-full text-center text-xl md:text-2xl font-display font-medium tracking-wide transition-all py-3.5 rounded-2xl ${isActive ? 'bg-primary/10 text-primary' : 'text-gray-300 hover:text-white hover:bg-white/5'}`}
+                      >
+                        {item.name}
+                      </Link>
+                    </motion.div>
                   );
                 })}
               </div>
               
-              <div className="mt-8 flex flex-col gap-4">
+              <div className="mt-8 mb-8 flex flex-col gap-4">
                 {user ? (
-                   <button 
+                   <motion.button 
+                     initial={{ opacity: 0, y: 20 }}
+                     animate={{ opacity: 1, y: 0 }}
+                     transition={{ delay: 0.4 }}
                      onClick={() => { logout(); setIsOpen(false); }}
-                     className="w-full py-4 rounded-xl border border-white/10 text-white font-bold uppercase tracking-widest hover:bg-white/5 flex items-center justify-center gap-2"
+                     className="w-full py-3.5 rounded-xl border border-red-500/20 text-red-400 font-semibold tracking-wide hover:bg-red-500/10 transition-colors flex items-center justify-center gap-2"
                    >
                      <LogOut size={18} /> Sign Out
-                   </button>
+                   </motion.button>
                 ) : (
-                  <div className="flex flex-col gap-3">
-                    <Link 
-                      to="/signup"
-                      onClick={() => setIsOpen(false)}
-                      className="w-full py-4 rounded-xl bg-primary text-background font-bold uppercase tracking-widest shadow-[0_0_15px_rgba(0,223,143,0.3)] text-center flex items-center justify-center gap-2"
-                    >
-                      Create Account
-                    </Link>
-                    <Link 
-                      to="/login"
-                      onClick={() => setIsOpen(false)}
-                      className="w-full py-4 rounded-xl bg-white/5 border border-white/10 text-white font-bold uppercase tracking-widest hover:bg-white/10 transition-colors text-center inline-block"
+                  <motion.div 
+                    initial={{ opacity: 0, y: 20 }} 
+                    animate={{ opacity: 1, y: 0 }} 
+                    transition={{ delay: 0.4 }}
+                    className="grid grid-cols-2 gap-3"
+                  >
+                    <button 
+                      onClick={() => { setAuthMode('login'); setIsAuthModalOpen(true); setIsOpen(false); }}
+                      className="w-full py-3.5 rounded-xl bg-white/5 border border-white/10 text-white font-semibold tracking-wide hover:bg-white/10 transition-colors text-center text-sm"
                     >
                       Log In
-                    </Link>
-                  </div>
+                    </button>
+                    <button 
+                      onClick={() => { setAuthMode('signup'); setIsAuthModalOpen(true); setIsOpen(false); }}
+                      className="w-full py-3.5 rounded-xl bg-primary text-background font-semibold tracking-wide shadow-[0_0_15px_rgba(0,223,143,0.3)] text-center text-sm"
+                    >
+                      Sign Up
+                    </button>
+                  </motion.div>
                 )}
               </div>
 
-              <div className="mt-auto mb-12 flex justify-between items-center pt-8">
-                <p className="text-xs text-gray-500 font-semibold uppercase tracking-widest">Connect</p>
-                <div className="flex gap-4">
-                  <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/10 text-white hover:bg-primary hover:border-primary hover:text-background transition-all">
-                    in
-                  </a>
-                  <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/10 text-white hover:bg-primary hover:border-primary hover:text-background transition-all">
-                    yt
-                  </a>
-                </div>
-              </div>
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6 }}
+                className="mt-auto flex justify-center items-center gap-6 pb-4"
+              >
+                <a href="#" className="text-gray-400 hover:text-[#00df8f] transition-all hover:scale-110 hover:-translate-y-1">
+                  <FacebookIcon size={22} />
+                </a>
+                <a href="#" className="text-gray-400 hover:text-[#00df8f] transition-all hover:scale-110 hover:-translate-y-1">
+                  <InstagramIcon size={22} />
+                </a>
+                <a href="#" className="text-gray-400 hover:text-[#00df8f] transition-all hover:scale-110 hover:-translate-y-1">
+                  <LinkedinIcon size={22} />
+                </a>
+                <a href="#" className="text-gray-400 hover:text-[#00df8f] transition-all hover:scale-110 hover:-translate-y-1">
+                  <YoutubeIcon size={24} />
+                </a>
+              </motion.div>
             </motion.div>
           )}
         </AnimatePresence>
@@ -260,6 +288,7 @@ const Navbar = () => {
       <AuthModal 
         isOpen={isAuthModalOpen} 
         onClose={() => setIsAuthModalOpen(false)} 
+        initialMode={authMode}
       />
     </>
   );

@@ -15,6 +15,7 @@ const RecentWorks = lazy(() => import('./components/RecentWorks'));
 const ProjectDetails = lazy(() => import('./components/ProjectDetails'));
 const ProjectsGallery = lazy(() => import('./components/ProjectsGallery'));
 const Services = lazy(() => import('./components/Services'));
+const PlatformService = lazy(() => import('./components/PlatformService'));
 const Contact = lazy(() => import('./components/Contact'));
 const PrivacyPolicy = lazy(() => import('./components/PrivacyPolicy'));
 const TermsOfService = lazy(() => import('./components/TermsOfService'));
@@ -25,6 +26,7 @@ const Payment = lazy(() => import('./components/dashboard/Payment'));
 const Signup = lazy(() => import('./components/Signup'));
 const Login = lazy(() => import('./components/Login'));
 const Blog = lazy(() => import('./components/Blog'));
+const BlogPost = lazy(() => import('./components/BlogPost'));
 function App() {
   const location = useLocation();
   const isDashboard = location.pathname.includes('/dashboard') || location.pathname.includes('/admin');
@@ -87,11 +89,13 @@ function App() {
               <Routes>
                 <Route path="/" element={<Hero />} />
                 <Route path="/services" element={<Services />} />
+                <Route path="/services/:platformId" element={<PlatformService />} />
                 <Route path="/projects" element={<RecentWorks />} />
                 <Route path="/projects/:id" element={<ProjectDetails />} />
                 <Route path="/all-projects" element={<ProjectsGallery />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/blog" element={<Blog />} />
+                <Route path="/blog/:id" element={<BlogPost />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                 <Route path="/terms-of-service" element={<TermsOfService />} />

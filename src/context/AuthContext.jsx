@@ -5,7 +5,8 @@ import {
   signOut,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
-  OAuthProvider
+  OAuthProvider,
+  updateProfile
 } from 'firebase/auth';
 import { auth, googleProvider } from '../firebase';
 
@@ -68,8 +69,13 @@ export const AuthProvider = ({ children }) => {
     return signInWithEmailAndPassword(auth, email, password);
   };
 
-  const signupWithEmail = (email, password) => {
-    return createUserWithEmailAndPassword(auth, email, password);
+  const signupWithEmail = async (email, password, name) => {
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    if (name) {
+      await updateProfile(userCredential.user, { displayName: name });
+      setUser(prev => ({ ...prev, displayName: name }));
+    }
+    return userCredential;
   };
 
   const logout = () => {

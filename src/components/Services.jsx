@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Minus, AlertCircle, Zap, TrendingUp, CheckCircle2, ShieldAlert, BarChart, Search, Users, DollarSign, RefreshCcw, LayoutDashboard, Crown } from 'lucide-react';
 
@@ -53,6 +54,40 @@ const stages = [
   }
 ];
 
+const platforms = [
+  { 
+    id: 'facebook',
+    name: 'Facebook', 
+    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg',
+    color: '#1877F2', desc: 'Community building & highly targeted ad campaigns.' 
+  },
+  { 
+    id: 'instagram',
+    name: 'Instagram', 
+    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg',
+    color: '#E1306C', desc: 'Visual storytelling, Reels growth & engagement.' 
+  },
+  { 
+    id: 'linkedin',
+    name: 'LinkedIn', 
+    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/8/81/LinkedIn_icon.svg',
+    color: '#0A66C2', desc: 'B2B networking, thought leadership & lead gen.' 
+  },
+  { 
+    id: 'youtube',
+    name: 'YouTube', 
+    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg',
+    color: '#FF0000', desc: 'Long-form content, SEO optimization & monetization.' 
+  },
+  { 
+    id: 'tiktok',
+    name: 'TikTok', 
+    logoUrl: 'https://upload.wikimedia.org/wikipedia/en/a/a9/TikTok_logo.svg',
+    color: '#00f2fe', 
+    desc: 'Viral short-form content & trend hijacking strategies.' 
+  }
+];
+
 const Services = () => {
   const [openIdx, setOpenIdx] = useState(0);
 
@@ -61,8 +96,15 @@ const Services = () => {
   };
 
   return (
-    <section id="services" className="py-24 md:py-32 px-6 md:px-16 bg-transparent relative z-10">
-      <div className="w-full max-w-5xl mx-auto">
+    <section id="services" className="py-24 md:py-32 px-6 md:px-16 bg-transparent relative z-10 overflow-hidden">
+      
+      {/* Ambient Background Glows like Home Page */}
+      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
+        <div className="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] bg-primary/10 blur-[150px] rounded-full mix-blend-screen animate-pulse" style={{ animationDuration: '8s' }} />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[50vw] h-[50vw] bg-[#00b373]/10 blur-[150px] rounded-full mix-blend-screen animate-pulse" style={{ animationDuration: '12s' }} />
+      </div>
+
+      <div className="w-full max-w-5xl mx-auto relative z-10">
         
         {/* Section Header */}
         <motion.div 
@@ -76,126 +118,138 @@ const Services = () => {
             <span className="block text-white">STAGES OF DIGITAL</span>
             <span className="block text-stroke-primary">GROWTH<span className="text-primary" style={{ WebkitTextStroke: '0px' }}>.</span></span>
           </h2>
-          <p className="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto font-light leading-relaxed">
-            A transparent, data-driven blueprint to scale your brand, fix critical infrastructure issues, and ruthlessly multiply your revenue. No fluff. Just execution.
-          </p>
         </motion.div>
 
-        {/* Core Philosophy Intro */}
+
+
+        {/* Social Media Management Showcase */}
         <motion.div 
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-24"
+          className="mb-32 mt-12"
         >
-          {[
-            { icon: AlertCircle, title: 'Stop the Bleeding', desc: 'Most brands lose 30% of their ad budget to poor tracking and technical debt. I fix the leaks first.' },
-            { icon: BarChart, title: 'Data Over Feelings', desc: 'Every decision is backed by hard analytics. We scale what prints money and ruthlessly kill what doesn\'t.' },
-            { icon: Zap, title: 'Full-Stack Execution', desc: 'From recovering banned accounts to scaling $10k/day ad spend. I handle the entire growth ecosystem.' }
-          ].map((item, i) => (
-            <div key={i} className="bg-white/[0.02] border border-white/5 rounded-3xl p-8 glass-edge hover:bg-white/[0.04] transition-colors duration-500">
-              <item.icon className="w-8 h-8 text-primary mb-6" />
-              <h4 className="text-white font-bold text-lg mb-3">{item.title}</h4>
-              <p className="text-gray-400 text-sm leading-relaxed">{item.desc}</p>
-            </div>
-          ))}
+          <div className="flex flex-wrap justify-center items-end gap-12 md:gap-20 max-w-6xl mx-auto pt-10 pb-20">
+            {platforms.map((platform, i) => (
+              <motion.div
+                key={platform.name}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1, type: "spring", stiffness: 100 }}
+                className="group relative flex flex-col items-center w-32 md:w-40 text-center cursor-pointer"
+              >
+                <Link 
+                  to={`/services/${platform.id}`} 
+                  className="flex flex-col items-center w-full"
+                >
+                  {/* Floating Icon with continuous gentle bounce */}
+                  <motion.div 
+                    animate={{ y: [0, -12, 0] }}
+                    transition={{ duration: 4 + (i * 0.5), repeat: Infinity, ease: "easeInOut" }}
+                    className="relative mb-6"
+                  >
+                    {/* Constant subtle brand glow behind the icon */}
+                    <div 
+                      className="absolute inset-0 opacity-20 blur-[30px] rounded-full scale-[1.8] group-hover:opacity-70 transition-opacity duration-700"
+                      style={{ backgroundColor: platform.color }}
+                    />
+                    
+                    {/* The Icon */}
+                    <img 
+                      src={platform.logoUrl} 
+                      alt={platform.name} 
+                      className="w-16 h-16 md:w-24 md:h-24 object-contain relative z-10 group-hover:scale-[1.15] transition-transform duration-700 drop-shadow-[0_20px_30px_rgba(0,0,0,0.7)]"
+                    />
+
+                    {/* 3D Floor Reflection Shadow */}
+                    <div 
+                      className="absolute -bottom-8 left-1/2 -translate-x-1/2 w-16 h-4 rounded-[100%] blur-[10px] opacity-40 group-hover:opacity-80 group-hover:scale-75 transition-all duration-700"
+                      style={{ backgroundColor: platform.color }}
+                    />
+                  </motion.div>
+                  
+                  <div className="mt-8 relative z-20">
+                    <h4 
+                      className="text-white font-display font-bold text-xl md:text-2xl transition-all duration-500 group-hover:-translate-y-2"
+                      style={{ textShadow: `0 0 20px ${platform.color}50` }}
+                    >
+                      {platform.name}
+                    </h4>
+                    
+                    {/* Reveal description on hover for ultra-clean default look */}
+                    <div className="overflow-hidden absolute top-full left-1/2 -translate-x-1/2 w-[200px]">
+                      <p className="text-gray-400 font-light text-xs md:text-sm leading-relaxed opacity-0 -translate-y-4 group-hover:opacity-100 group-hover:translate-y-2 transition-all duration-500 text-center">
+                        {platform.desc}
+                      </p>
+                    </div>
+                  </div>
+                </Link>
+              </motion.div>
+            ))}
+          </div>
         </motion.div>
 
-        {/* The Deep-Dive Accordion */}
-        <div className="space-y-6 mb-32">
+        {/* The Stages Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-32">
           {stages.map((stage, index) => {
-            const isOpen = openIdx === index;
             const StageIcon = stage.icon;
             
             return (
-               <motion.div 
+              <motion.div 
                 key={stage.num}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-50px" }}
                 transition={{ delay: index * 0.1, duration: 0.5 }}
-                className={`rounded-[32px] overflow-hidden transition-all duration-500 ${isOpen ? 'bg-[#0d1116] border border-primary/30 shadow-[0_10px_40px_rgba(0,223,143,0.1)] glass-edge' : 'bg-transparent border border-white/10 hover:border-white/20 hover:bg-white/[0.02]'}`}
+                className="group relative bg-[#0d1116]/60 backdrop-blur-xl border border-white/10 rounded-[2rem] p-8 hover:border-primary/30 transition-all duration-500 overflow-hidden flex flex-col h-full hover:shadow-[0_10px_30px_rgba(0,223,143,0.1)] hover:-translate-y-2"
               >
-                <button
-                  onClick={() => toggleOpen(index)}
-                  className="w-full py-8 md:py-10 px-6 md:px-10 flex items-center justify-between text-left group"
-                >
-                  <div className="flex items-center gap-6 md:gap-10">
-                    <span className={`text-2xl md:text-3xl font-mono font-bold transition-colors duration-500 ${isOpen ? 'text-primary' : 'text-gray-600 group-hover:text-gray-400'}`}>
-                      {stage.num}
-                    </span>
-                    <h3 className={`text-2xl md:text-4xl font-display font-bold tracking-tight transition-colors duration-500 ${isOpen ? 'text-white' : 'text-gray-400 group-hover:text-white'}`}>
-                      {stage.title}
-                    </h3>
+                {/* Background Number */}
+                <div className="absolute -top-4 -right-4 text-[8rem] font-display font-bold text-white/[0.02] group-hover:text-primary/[0.05] transition-colors duration-500 pointer-events-none select-none leading-none">
+                  {stage.num}
+                </div>
+
+                {/* Header */}
+                <div className="flex items-center gap-4 mb-6 relative z-10">
+                  <div className="w-12 h-12 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary group-hover:scale-110 group-hover:bg-primary group-hover:text-[#0d1116] transition-all duration-500 shadow-[0_0_15px_rgba(0,223,143,0.2)]">
+                    <StageIcon className="w-6 h-6" />
                   </div>
-                  
-                  <div className={`w-12 h-12 shrink-0 rounded-full border flex items-center justify-center transition-all duration-500 ${isOpen ? 'border-primary bg-primary/10 text-primary shadow-[0_0_15px_rgba(0,223,143,0.3)]' : 'border-white/10 text-white group-hover:border-white/30 group-hover:bg-white/5'}`}>
-                    {isOpen ? <Minus size={20} /> : <Plus size={20} />}
-                  </div>
-                </button>
+                  <h3 className="text-xl md:text-2xl font-display font-bold text-white tracking-tight">
+                    {stage.title}
+                  </h3>
+                </div>
                 
-                <AnimatePresence>
-                  {isOpen && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.5, ease: [0.32, 0.72, 0, 1] }}
-                      className="overflow-hidden"
-                    >
-                      <div className="pb-10 px-6 md:px-10 md:pl-[6.5rem]">
-                        
-                        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12">
-                          
-                          {/* Text Content */}
-                          <div className="md:col-span-8 space-y-8">
-                            
-                            {/* Problem */}
-                            <div>
-                              <div className="flex items-center gap-2 mb-3">
-                                <AlertCircle className="w-4 h-4 text-red-400" />
-                                <h4 className="text-xs font-bold tracking-[0.2em] text-red-400 uppercase">The Problem</h4>
-                              </div>
-                              <p className="text-gray-400 text-sm md:text-base leading-relaxed">{stage.problem}</p>
-                            </div>
+                {/* Content */}
+                <div className="space-y-5 relative z-10 flex-grow">
+                  {/* Problem */}
+                  <div>
+                    <div className="flex items-center gap-2 mb-2">
+                      <AlertCircle className="w-3.5 h-3.5 text-red-400" />
+                      <h4 className="text-[10px] font-bold tracking-widest text-red-400 uppercase">The Problem</h4>
+                    </div>
+                    <p className="text-gray-400 text-xs md:text-sm leading-relaxed">{stage.problem}</p>
+                  </div>
 
-                            {/* Execution */}
-                            <div>
-                              <div className="flex items-center gap-2 mb-3">
-                                <Zap className="w-4 h-4 text-primary" />
-                                <h4 className="text-xs font-bold tracking-[0.2em] text-primary uppercase">My Execution</h4>
-                              </div>
-                              <p className="text-gray-300 text-sm md:text-base leading-relaxed">{stage.execution}</p>
-                            </div>
+                  {/* Execution */}
+                  <div>
+                    <div className="flex items-center gap-2 mb-2">
+                      <Zap className="w-3.5 h-3.5 text-primary" />
+                      <h4 className="text-[10px] font-bold tracking-widest text-primary uppercase">Execution</h4>
+                    </div>
+                    <p className="text-gray-300 text-xs md:text-sm leading-relaxed">{stage.execution}</p>
+                  </div>
+                </div>
 
-                            {/* ROI */}
-                            <div className="bg-primary/5 border border-primary/20 rounded-2xl p-6 relative overflow-hidden">
-                              <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 blur-[40px] rounded-full" />
-                              <div className="flex items-center gap-2 mb-3 relative z-10">
-                                <CheckCircle2 className="w-5 h-5 text-[#00ffaa]" />
-                                <h4 className="text-sm font-bold tracking-widest text-white uppercase">The Outcome / ROI</h4>
-                              </div>
-                              <p className="text-primary/90 font-medium text-sm md:text-base leading-relaxed relative z-10">{stage.roi}</p>
-                            </div>
-
-                          </div>
-
-                          {/* Visual / Icon Display */}
-                          <div className="md:col-span-4 flex items-center justify-center border-t md:border-t-0 md:border-l border-white/10 pt-8 md:pt-0">
-                            <div className="relative w-32 h-32 md:w-48 md:h-48 flex items-center justify-center">
-                              <div className="absolute inset-0 bg-primary/5 rounded-full animate-ping opacity-75" style={{ animationDuration: '3s' }} />
-                              <div className="absolute inset-4 bg-primary/10 rounded-full blur-xl" />
-                              <div className="w-20 h-20 md:w-28 md:h-28 bg-[#14181f] border border-white/10 rounded-full flex items-center justify-center relative z-10 shadow-2xl glass-edge">
-                                <StageIcon className="w-10 h-10 md:w-12 md:h-12 text-primary" />
-                              </div>
-                            </div>
-                          </div>
-
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                {/* ROI Container */}
+                <div className="mt-6 pt-5 border-t border-white/10 relative z-10">
+                  <div className="flex items-center gap-2 mb-2">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-[#00ffaa]" />
+                    <h4 className="text-[10px] font-bold tracking-widest text-[#00ffaa] uppercase">The ROI</h4>
+                  </div>
+                  <p className="text-[#00ffaa]/90 font-medium text-xs md:text-sm leading-relaxed">
+                    {stage.roi}
+                  </p>
+                </div>
               </motion.div>
             );
           })}

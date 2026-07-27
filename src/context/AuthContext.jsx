@@ -8,7 +8,8 @@ import {
   OAuthProvider,
   updateProfile
 } from 'firebase/auth';
-import { auth, googleProvider } from '../firebase';
+import { auth, googleProvider, db } from '../firebase';
+import { doc, setDoc } from 'firebase/firestore';
 
 const appleProvider = new OAuthProvider('apple.com');
 const AuthContext = createContext({});
@@ -69,10 +70,27 @@ export const AuthProvider = ({ children }) => {
     return signInWithEmailAndPassword(auth, email, password);
   };
 
-  const signupWithEmail = async (email, password, name) => {
+  const signupWithEmail = async (email, password, name, phone, country) => {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+    
     if (name) {
-      await updateProfile(userCredential.user, { displayName: name });
+      await updateProfile(user, { displayName: name });
+    }
+    
+    try {
+      await setDoc(doc(db, "users", user.uid), {
+        name: name || "",
+        email: email,
+        phone: phone || "",
+        country: country || "",
+        createdAt: new Date().toISOString()
+      });
+    } catch (e) {
+      console.error("Error saving user data to Firestore:", e);
+    }
+    
+    if (name) {
       setUser(prev => ({ ...prev, displayName: name }));
     }
     return userCredential;

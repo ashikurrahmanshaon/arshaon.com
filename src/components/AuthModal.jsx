@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Mail, Lock, AlertCircle, Loader2, User } from 'lucide-react';
+import { X, Mail, Lock, AlertCircle, Loader2, User, Phone, Globe } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 const AuthModal = ({ isOpen, onClose, initialMode = 'login' }) => {
@@ -16,6 +16,8 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'login' }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [country, setCountry] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const { loginWithGoogle, loginWithEmail, signupWithEmail } = useAuth();
@@ -36,7 +38,7 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'login' }) => {
 
   const handleEmailAuth = async (e) => {
     e.preventDefault();
-    if (!email || !password || (!isLogin && !name)) {
+    if (!email || !password || (!isLogin && (!name || !phone || !country))) {
       return setError('Please fill in all fields.');
     }
     
@@ -46,7 +48,7 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'login' }) => {
       if (isLogin) {
         await loginWithEmail(email, password);
       } else {
-        await signupWithEmail(email, password, name);
+        await signupWithEmail(email, password, name, phone, country);
       }
       onClose();
     } catch (err) {
@@ -147,16 +149,38 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'login' }) => {
 
               <form onSubmit={handleEmailAuth} className="space-y-4">
                 {!isLogin && (
-                  <div className="relative">
-                    <User className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 w-5 h-5" />
-                    <input
-                      type="text"
-                      placeholder="Full Name"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      className="w-full bg-white/5 border border-white/10 rounded-2xl py-3.5 pl-12 pr-4 text-white placeholder:text-gray-500 focus:outline-none focus:border-primary focus:bg-white/10 transition-all"
-                    />
-                  </div>
+                  <>
+                    <div className="relative">
+                      <User className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 w-5 h-5" />
+                      <input
+                        type="text"
+                        placeholder="Full Name"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        className="w-full bg-white/5 border border-white/10 rounded-2xl py-3.5 pl-12 pr-4 text-white placeholder:text-gray-500 focus:outline-none focus:border-primary focus:bg-white/10 transition-all"
+                      />
+                    </div>
+                    <div className="relative">
+                      <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 w-5 h-5" />
+                      <input
+                        type="tel"
+                        placeholder="Phone Number"
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                        className="w-full bg-white/5 border border-white/10 rounded-2xl py-3.5 pl-12 pr-4 text-white placeholder:text-gray-500 focus:outline-none focus:border-primary focus:bg-white/10 transition-all"
+                      />
+                    </div>
+                    <div className="relative">
+                      <Globe className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 w-5 h-5" />
+                      <input
+                        type="text"
+                        placeholder="Country"
+                        value={country}
+                        onChange={(e) => setCountry(e.target.value)}
+                        className="w-full bg-white/5 border border-white/10 rounded-2xl py-3.5 pl-12 pr-4 text-white placeholder:text-gray-500 focus:outline-none focus:border-primary focus:bg-white/10 transition-all"
+                      />
+                    </div>
+                  </>
                 )}
                 <div className="relative">
                   <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 w-5 h-5" />
